@@ -9,16 +9,19 @@
       gtag('js', new Date());
       gtag('config', 'G-7VTBFP1ZC2');
     </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[MISSION MODE]</title> 
+    <title>[WRESTLEPATH: MISSION MODE]</title>
     <style>
         /* Custom intense glow overlay for multiplier spaces */
-.intense-multiplier-glow {
-    box-shadow: inset 0 0 15px var(--space-glow), 0 0 15px var(--space-glow) !important;
-    text-shadow: 0 0 8px #fff, 0 0 12px var(--space-glow);
-}
+        .intense-multiplier-glow {
+            box-shadow: inset 0 0 15px var(--space-glow), 0 0 15px var(--space-glow) !important;
+            text-shadow: 0 0 8px #fff, 0 0 12px var(--space-glow);
+        }
+        
         * {
             box-sizing: border-box;
         }
@@ -54,6 +57,25 @@
             text-shadow: 0 0 10px var(--neon-glow);
             text-transform: uppercase;
             letter-spacing: 2px;
+        }
+
+        /* START TILE PULSE */
+        .start-hint::after {
+            content: "START";
+            position: absolute;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px var(--active-glow-color, #fff);
+            animation: pulseText 1s ease-in-out infinite;
+            z-index: 5;
+            pointer-events: none; 
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.95); }
         }
 
         .game-container {
@@ -228,39 +250,83 @@
             height: 100%;
             object-fit: contain;
             user-select: none;
+            position: relative;
+            z-index: 2; 
         }
 
-        .grid-space.locked {
-            filter: brightness(0.3) grayscale(0.5);
-            border-color: #222 !important;
+        /* --- NEW PLACEMENT AND COMPLETION STATES --- */
+        
+        /* Placed tiles that haven't scored yet stay dimmed */
+        .grid-space.placed-dim:not(.intense-multiplier-glow) {
+            border-color: #444 !important;
+        }
+        
+        .grid-space.placed-dim .glyph-display {
+            opacity: 0.4;
+            filter: grayscale(0.5);
         }
 
-        .grid-space.locked::after {
-            content: "🔒";
-            position: absolute;
-            font-size: clamp(14px, 3vw, 22px);
-            color: rgba(255,255,255,0.4);
-            z-index: 3;
+        /* Completed chains get a thick DARK outline and restore their brightness */
+        .grid-space.completed {
+            box-shadow: inset 0 0 20px var(--match-color, #fff) !important;
+            border: 3px solid #111 !important; 
+        }
+        
+        .grid-space.completed .glyph-display {
+            opacity: 1;
+            filter: drop-shadow(0 0 8px var(--match-color, #fff));
         }
 
-        /* NEON PULSE FOR MATCHES */
+        /* Pulse animation for when a connection is successful */
         @keyframes neonPulse {
-            0% { 
-                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--match-color, #fff); 
-                border-color: #fff; 
-            }
-            50% { 
-                box-shadow: 0 0 20px var(--match-color, #fff), 0 0 30px var(--match-color, #fff); 
-                border-color: var(--match-color, #fff); 
-            }
-            100% { 
-                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--match-color, #fff); 
-                border-color: #fff; 
-            }
+            0% { box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--match-color, #fff); border-color: #fff; }
+            50% { box-shadow: 0 0 20px var(--match-color, #fff), 0 0 30px var(--match-color, #fff); border-color: var(--match-color, #fff); }
+            100% { box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--match-color, #fff); border-color: #fff; }
         }
 
         .pulse-match {
             animation: neonPulse 0.5s ease-in-out 3;
+        }
+
+        /* --- CONNECTORS AND BADGES --- */
+        .chain-connector {
+            position: absolute;
+            z-index: 1; 
+            border: 2px solid #111; 
+            box-shadow: 0 0 5px #000;
+            pointer-events: none;
+        }
+        
+        .connect-right { top: 50%; left: 50%; width: calc(100% + 6px); height: 14px; transform: translateY(-50%); }
+        .connect-left  { top: 50%; right: 50%; width: calc(100% + 6px); height: 14px; transform: translateY(-50%); }
+        .connect-down  { left: 50%; top: 50%; height: calc(100% + 6px); width: 14px; transform: translateX(-50%); }
+        .connect-up    { left: 50%; bottom: 50%; height: calc(100% + 6px); width: 14px; transform: translateX(-50%); }
+
+        .combo-badge {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: #050505;
+            border: 1px solid var(--match-color, #fff);
+            padding: 2px;
+            border-radius: 4px;
+            z-index: 5;
+            box-shadow: 0 0 5px #000;
+            pointer-events: none;
+            display: flex;
+            gap: 2px;
+        }
+
+        .mini-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            border: 1px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
         }
 
         .stat-grid {
@@ -324,19 +390,23 @@
             border-left: 4px solid #444;
             font-size: 13px;
         }
+
         .objective-item.done {
             border-left-color: #008000;
             background: #091a09;
             color: #88ff88;
         }
+
         .objective-item.done .objective-sequence-container {
             opacity: 0.5;
         }
+
         .objective-sequence-container {
             display: flex;
             align-items: center;
             gap: 4px;
         }
+
         .objective-dot {
             width: 22px;
             height: 22px;
@@ -350,7 +420,6 @@
             color: #fff;
         }
 
-        /* PERSISTENT LEADERBOARD GRAPHICS FROM ENDLESS ARCADE */
         .leaderboard-list {
             display: flex;
             flex-direction: column;
@@ -389,6 +458,36 @@
         .utils-btn:hover {
             background-color: #336699;
             text-shadow: 0 0 5px #fff;
+        }
+
+        .close-btn {
+            background: #336699; 
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            padding: 20px;
         }
 
         #statusModal {
@@ -430,7 +529,9 @@
 </head>
 <body>
 
-    <div id="boardTitle" class="board-title">[ MISSION MODE: LEVEL 1 ]</div>
+    <div id="boardTitle" class="board-title">[WRESTLEPATH: MISSION MODE - LEVEL 1]</div>
+    
+    <button class="utils-btn" style="width: 200px; margin-bottom: 20px;" onclick="openRules()">VIEW RULES</button>
 
     <div class="game-container">
         
@@ -451,7 +552,7 @@
                 </div>
 
                 <div class="stat-box">
-                    <div>CURRENT CONNECTION</div>
+                    <div>CURRENT CHAIN</div>
                     <div id="chainDisplay" class="chain-display"></div>
                     <div id="chainHint" style="font-size: 11px; margin-top: 5px; color: #aaa;">BUILD COMBINATIONS THAT MATCH THE REQUESTED SEQUENCES!</div>
                 </div>
@@ -470,11 +571,20 @@
 
     </div>
 
+    <div id="rules-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="close-btn" onclick="document.getElementById('rules-modal').style.display='none'">Close Rules</button>
+            <div id="rules-text" style="margin-top: 30px; text-align: left; line-height: 1.6; font-size: 1.2rem; color: white;">
+                <p style="text-align:center;">Loading rules...</p>
+            </div>
+        </div>
+    </div>
+
     <div id="statusModal">
         <div class="modal-content" id="modalContent"></div>
     </div>
 
-    <script> // Add extra lines to add new characters.
+    <script>
         const COLORS = {
             BLUE: [
                 { type: 'BLUE',   name: 'BLUE LOGO A',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
@@ -521,6 +631,8 @@
             }
         ];
 
+        const API_URL = "https://script.google.com/macros/s/AKfycbyygfSiaLHY_oZVMlhYv5dboBe67XWU0SuDz4l2OG5nfdlarrNgVyUWwvFVtiOMfGQS3g/exec";
+
         let currentLevelIndex = 0; 
         let score = 0;
         let currentHand = [];
@@ -529,22 +641,98 @@
         let boardState = [];
         let currentChain = [];
         let runningObjectives = [];
-
-        // Seed data defaults if local storage hasn't been instantiated yet
-        const DEFAULT_LEADERBOARD = [
-            { name: "BINTERMAN", score: 82919 },
-            { name: "GEOFF", score: 7015 },
-            { name: "TYLER", score: 1250 },
-            { name: "ETHAN", score: 1206 },
-            { name: "ALEX", score: 1201 },
-        ];
-        let highScores = [];
+        let highScores = []; 
+        let randomStartPos = null; 
 
         window.onload = function() {
             buildBoardHTML();
-            renderLeaderboard();
+            fetchAndRenderLeaderboard(); 
             loadLevel(0);
         };
+
+        async function fetchAndRenderLeaderboard() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                highScores = data.sort((a, b) => b.score - a.score);
+                renderLiveLeaderboard(highScores);
+            } catch (error) {
+                console.error("Could not fetch leaderboard:", error);
+            }
+        }
+
+        function renderLiveLeaderboard(data) {
+            const container = document.getElementById('leaderboardList');
+            container.innerHTML = '';
+
+            data.slice(0, 6).forEach((entry, idx) => {
+                let entryEl = document.createElement('div');
+                entryEl.className = `leaderboard-entry ${idx === 0 ? 'top-spot' : ''}`;
+                let flag = idx === 0 ? '<span style="margin-right: 6px;">🚩</span>' : '';
+
+                entryEl.innerHTML = `
+                    <span>${flag}${idx + 1}. ${entry.name}</span>
+                    <span style="color: var(--text-gold); font-weight:bold;">${entry.score}</span>
+                `;
+                container.appendChild(entryEl);
+            });
+        }
+
+        async function submitHighScore() {
+            let initials = document.getElementById('playerInitials').value.toUpperCase() || "AAA";
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `<h2 style="color: #fff; margin-top: 20px;">SAVING...</h2>`; 
+
+            try {
+                await fetch(API_URL, {
+                    method: "POST",
+                    mode: "no-cors", 
+                    headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+                    body: JSON.stringify({ name: initials, score: score })
+                });
+
+                setTimeout(() => {
+                    fetchAndRenderLeaderboard();
+                    document.getElementById('statusModal').style.display = 'none';
+                    currentLevelIndex = 0;
+                    score = 0;
+                    loadLevel(0);
+                }, 1000);
+
+            } catch (error) {
+                console.error("Submission failed:", error);
+                alert("Could not connect to the leaderboard. Please try again.");
+                document.getElementById('statusModal').style.display = 'none';
+                currentLevelIndex = 0;
+                score = 0;
+                loadLevel(0);
+            }
+        }
+
+        function openRules() {
+            const rulesUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vThEneZk9zSyUQ3uTizZ8z8Ur7hBjqXeQaq8p0bgv__VQQlp2EeYLeJ0QAmVpDP02jcQI4IzHFAFbds/pub?gid=1482788409&single=true&output=csv";
+            const rulesContainer = document.getElementById('rules-text');
+            
+            document.getElementById('rules-modal').style.display = 'flex';
+            rulesContainer.innerHTML = "<p style='text-align:center;'>Loading rules...</p>";
+            
+            Papa.parse(rulesUrl, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    let html = `<h3 style="text-align: center;">How to Play:</h3>`;
+                    results.data.forEach(row => {
+                        if (row.RuleText && row.RuleText.trim() !== "") {
+                            html += `<p style="font-size: 15px; margin-bottom: 12px;">${row.RuleText}</p>`;
+                        }
+                    });
+                    rulesContainer.innerHTML = html;
+                },
+                error: function() {
+                    rulesContainer.innerHTML = "<p>Could not load rules. Check the URL.</p>";
+                }
+            });
+        }
 
         function buildBoardHTML() {
             const grid = document.getElementById('gridBoard');
@@ -564,27 +752,6 @@
                     grid.appendChild(space);
                 }
             }
-        }
-
-        function renderLeaderboard() {
-            highScores = JSON.parse(localStorage.getItem('missionLeaderboard')) || DEFAULT_LEADERBOARD;
-            highScores.sort((a, b) => b.score - a.score);
-            
-            const container = document.getElementById('leaderboardList');
-            container.innerHTML = '';
-
-            highScores.slice(0, 5).forEach((entry, idx) => {
-                let entryEl = document.createElement('div');
-                entryEl.className = `leaderboard-entry ${idx === 0 ? 'top-spot' : ''}`;
-                
-                let flag = idx === 0 ? '<span style="margin-right: 6px;">🚩</span>' : '';
-
-                entryEl.innerHTML = `
-                    <span>${flag}${idx + 1}. ${entry.name}</span>
-                    <span style="color: var(--text-gold); font-weight:bold;">${entry.score}</span>
-                `;
-                container.appendChild(entryEl);
-            });
         }
 
         function loadLevel(index) {
@@ -608,65 +775,67 @@
         }
 
         function resetLevelData() {
-    currentChain = [];
-    selectedCardIndex = 0;
-    playerPos = null; 
-    document.getElementById('statusModal').style.display = 'none';
+            currentChain = [];
+            selectedCardIndex = 0;
+            playerPos = null; 
+            document.getElementById('statusModal').style.display = 'none';
 
-    // 1. Clear the board state
-    for(let r=0; r<8; r++) {
-        for(let c=0; c<8; c++) {
-            boardState[r][c] = { occupied: false, type: null, variantData: null, locked: false, multiplierColor: null };
-            let el = document.getElementById(`space-${r}-${c}`);
-            el.className = 'grid-space';
-            el.style.border = '1.5px solid #333';
-            el.classList.remove('intense-multiplier-glow');
-            el.removeAttribute('data-multiplier-hint');
-            let asset = el.querySelector('.glyph-display');
-            if(asset) asset.remove();
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    boardState[r][c] = { occupied: false, type: null, variantData: null, locked: false, multiplierColor: null };
+                    let el = document.getElementById(`space-${r}-${c}`);
+                    
+                    // Clear visual states and badges/connectors
+                    el.innerHTML = '';
+                    el.className = 'grid-space';
+                    el.style.borderColor = '#333';
+                    el.style.removeProperty('--active-glow-color');
+                    el.style.removeProperty('--active-glow-fade');
+                    el.style.removeProperty('--match-color');
+                    el.removeAttribute('data-multiplier-hint');
+                }
+            }
+
+            const MAX_BONUS_SPACES = 4; 
+            let emptySpaces = [];
+            
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    if (!boardState[r][c].occupied) emptySpaces.push({r, c});
+                }
+            }
+            
+            const numToSpawn = Math.min(MAX_BONUS_SPACES, emptySpaces.length);
+            const bonusColorPool = ['#336699', '#ff0000', '#008000', '#f1c40f']; 
+            
+            for (let i = 0; i < numToSpawn; i++) {
+                let randomIndex = Math.floor(Math.random() * emptySpaces.length);
+                let {r, c} = emptySpaces.splice(randomIndex, 1)[0];
+                
+                let assignedColor = bonusColorPool[Math.floor(Math.random() * bonusColorPool.length)];
+                boardState[r][c].multiplierColor = assignedColor;
+                
+                let spaceEl = document.getElementById(`space-${r}-${c}`);
+                spaceEl.style.setProperty('--space-glow', assignedColor);
+                spaceEl.classList.add('intense-multiplier-glow');
+                spaceEl.style.borderColor = assignedColor;
+                spaceEl.style.borderStyle = 'double';
+                spaceEl.style.borderWidth = '4px';
+                spaceEl.setAttribute('data-multiplier-hint', (assignedColor === '#336699' ? 'BLUE' : 'BONUS') + ' X2');
+            }
+
+            currentHand = [];
+            for(let i=0; i<5; i++) {
+                currentHand.push(getRandomCard());
+            }
+
+            randomStartPos = { 
+                r: Math.floor(Math.random() * 8),
+                c: Math.floor(Math.random() * 8)
+            };
+
+            updateUI();
         }
-    }
-
-    /*************************************************************************
-     * 🛠️ DYNAMIC MULTIPLIER GENERATOR ENGINE
-     *************************************************************************/
-    const MAX_BONUS_SPACES = 4; 
-    let emptySpaces = [];
-    
-    // Scan the board for available spots
-    for(let r=0; r<8; r++) {
-        for(let c=0; c<8; c++) {
-            if (!boardState[r][c].occupied) emptySpaces.push({r, c});
-        }
-    }
-    
-    const numToSpawn = Math.min(MAX_BONUS_SPACES, emptySpaces.length);
-    const bonusColorPool = ['#336699', '#ff0000', '#008000', '#f1c40f']; 
-    
-    for (let i = 0; i < numToSpawn; i++) {
-        let randomIndex = Math.floor(Math.random() * emptySpaces.length);
-        let {r, c} = emptySpaces.splice(randomIndex, 1)[0];
-        
-        let assignedColor = bonusColorPool[Math.floor(Math.random() * bonusColorPool.length)];
-        boardState[r][c].multiplierColor = assignedColor;
-        
-        let spaceEl = document.getElementById(`space-${r}-${c}`);
-        spaceEl.style.setProperty('--space-glow', assignedColor);
-        spaceEl.classList.add('intense-multiplier-glow');
-        spaceEl.style.borderColor = assignedColor;
-        spaceEl.style.borderStyle = 'double';
-        spaceEl.style.borderWidth = '4px';
-        spaceEl.setAttribute('data-multiplier-hint', (assignedColor === '#336699' ? 'BLUE' : 'BONUS') + ' X2');
-    }
-    /*************************************************************************/
-
-    currentHand = [];
-    for(let i=0; i<5; i++) {
-        currentHand.push(getRandomCard());
-    }
-
-    updateUI();
-}
 
         function getRandomCard() {
             let randType = COLOR_POOL[Math.floor(Math.random() * COLOR_POOL.length)];
@@ -683,10 +852,10 @@
             imgNode.className = 'glyph-display';
             imgNode.src = cardObj.img;
             imgNode.alt = cardObj.name;
-            imgNode.style.filter = `drop-shadow(0 0 8px ${cardObj.color})`;
             
+            element.style.setProperty('--match-color', cardObj.color);
             element.appendChild(imgNode);
-            element.style.borderColor = cardObj.color;
+            element.classList.add('placed-dim'); // New placed tiles stay completely dim 
         }
 
         function getStyleDataByChar(char) {
@@ -771,21 +940,17 @@
             for(let r=0; r<8; r++) {
                 for(let c=0; c<8; c++) {
                     let el = document.getElementById(`space-${r}-${c}`);
-                    el.classList.remove('valid-move', 'player-here');
+                    el.classList.remove('valid-move', 'player-here', 'start-hint');
                 }
             }
 
             let chosenCard = currentHand[selectedCardIndex];
 
             if (playerPos === null) {
-                for(let r=0; r<8; r++) {
-                    for(let c=0; c<8; c++) {
-                        let el = document.getElementById(`space-${r}-${c}`);
-                        el.classList.add('valid-move');
-                        el.style.setProperty('--active-glow-color', chosenCard.color);
-                        el.style.setProperty('--active-glow-fade', chosenCard.glowFade);
-                    }
-                }
+                let el = document.getElementById(`space-${randomStartPos.r}-${randomStartPos.c}`);
+                el.classList.add('valid-move', 'start-hint'); 
+                el.style.setProperty('--active-glow-color', chosenCard.color);
+                el.style.setProperty('--active-glow-fade', chosenCard.glowFade);
                 return;
             }
 
@@ -868,18 +1033,23 @@
                     if (matchValid) {
                         obj.completed = true;
                         
-                        let basePoints = (obj.target.length * 50);  // This dictates how many points per space per combo.
+                        let basePoints = (obj.target.length * 50);  
                         let multiplierTriggered = false;
                         
                         let clearChainRef = currentChain.slice(startIdx, startIdx + targetLen);
                         currentChain = []; 
 
-                        // 🔍 Evaluate match segments against assigned multiplier conditions
-                        clearChainRef.forEach(coord => {
+                        // Builds the dynamic objective HTML to place into the sequence badge
+                        let badgeHTML = '';
+                        obj.target.forEach(char => {
+                            let vis = getStyleDataByChar(char);
+                            badgeHTML += `<div class="mini-dot" style="background-color: ${vis.color}; color: ${char === 'S' ? '#000' : '#fff'};">${char}</div>`;
+                        });
+
+                        clearChainRef.forEach((coord, i) => {
                             let cellEl = document.getElementById(`space-${coord.r}-${coord.c}`);
                             let cellData = boardState[coord.r][coord.c];
                             
-                            // Check if cell is an assigned multiplier node and the tile matched matches the required color
                             if (cellData.multiplierColor && cellData.variantData && cellData.variantData.color === cellData.multiplierColor) {
                                 multiplierTriggered = true;
                             }
@@ -892,18 +1062,45 @@
                                 cellEl.classList.remove('player-here');
                             }
                             
+                            // Removes the dim state so it can pulse brilliantly
+                            cellEl.classList.remove('placed-dim');
                             cellEl.classList.add('pulse-match');
                             
                             setTimeout(() => {
-                                cellEl.classList.remove('pulse-match');
-                                cellEl.classList.add('locked');
-                                boardState[coord.r][coord.c].locked = true;
-                                updateUI();
+                                // Double check the game hasn't reset mid-animation
+                                if(boardState[coord.r][coord.c].occupied) {
+                                    cellEl.classList.remove('pulse-match');
+                                    cellEl.classList.add('completed');
+                                    boardState[coord.r][coord.c].locked = true;
+
+                                    // Spawns the Combo Badge featuring the objective sequence 
+                                    let badge = document.createElement('div');
+                                    badge.className = 'combo-badge';
+                                    badge.style.setProperty('--match-color', cellData.variantData.color);
+                                    badge.innerHTML = badgeHTML;
+                                    cellEl.appendChild(badge);
+
+                                    // Spawn the Connectors to link the tiles
+                                    if (i < clearChainRef.length - 1) {
+                                        let next = clearChainRef[i+1];
+                                        let connector = document.createElement('div');
+                                        connector.className = 'chain-connector';
+                                        connector.style.backgroundColor = cellData.variantData.color;
+
+                                        if (next.c === coord.c + 1) connector.classList.add('connect-right');
+                                        else if (next.c === coord.c - 1) connector.classList.add('connect-left');
+                                        else if (next.r === coord.r + 1) connector.classList.add('connect-down');
+                                        else if (next.r === coord.r - 1) connector.classList.add('connect-up');
+                                        
+                                        cellEl.appendChild(connector);
+                                    }
+                                    updateUI();
+                                }
                             }, 1200);
                         });
 
                         if (multiplierTriggered) {
-                            basePoints *= 2; // Double points awarded!
+                            basePoints *= 2; 
                         }
                         
                         score += basePoints;
@@ -949,9 +1146,9 @@
             const content = document.getElementById('modalContent');
             
             let inputHTML = '';
-            const lowestScore = highScores.length >= 5 ? highScores[highScores.length - 1].score : 0;
+            const lowestScore = highScores.length >= 6 ? highScores[5].score : 0; 
             
-            if (score > lowestScore || highScores.length < 5) {
+            if (score > lowestScore || highScores.length < 6) {
                 inputHTML = `
                     <p>NEW HIGH SCORE! Enter your name:</p>
                     <input type="text" id="playerInitials"  value="D. Faultname">
@@ -963,7 +1160,7 @@
 
             content.innerHTML = `
                 <h2 style="color: #f1c40f; margin-top: 0;">🏆 ALL MATCHES BOOKED! 🏆</h2>
-                <p>You did a great job booking those shows, brother!</p>
+                <p>YOU DID A GREAT JOB PUTTING THOSE MATCHES TOGETHER, BROTHER!</p>
                 <h2 style="color: #fff;">FINAL SCORE: ${score}</h2>
                 ${inputHTML}
             `;
@@ -975,9 +1172,9 @@
             const content = document.getElementById('modalContent');
             
             let inputHTML = '';
-            const lowestScore = highScores.length >= 5 ? highScores[highScores.length - 1].score : 0;
+            const lowestScore = highScores.length >= 6 ? highScores[5].score : 0;
             
-            if (score > lowestScore || highScores.length < 5) {
+            if (score > lowestScore || highScores.length < 6) {
                 inputHTML = `
                     <p>YOU MADE THE LEADERBOARD! Enter your name here:</p>
                     <input type="text" id="playerInitials"  value="D. Faultname">
@@ -988,28 +1185,14 @@
             }
 
             content.innerHTML = `
-                <h2 style="color: #ff0000; margin-top: 0;">MISSION FAILURE</h2>
-                <p>No more available moves!</p>
+                <h2 style="color: #ff0000; margin-top: 0;">THE SHOW DID NOT GO ON... THANKS TO YOU!!!</h2>
+                <p>NO MORE AVAILABLE MOVES!</p>
                 <h3 style="color: #ffffff;">SCORE: ${score}</h3>
                 ${inputHTML}
             `;
             modal.style.display = 'flex';
         }
 
-        function submitHighScore() {
-            let initials = document.getElementById('playerInitials').value.toUpperCase() || "AAA";
-            highScores.push({ name: initials, score: score });
-            highScores.sort((a, b) => b.score - a.score);
-            highScores = highScores.slice(0, 5);
-            
-            localStorage.setItem('missionLeaderboard', JSON.stringify(highScores));
-            
-            renderLeaderboard();
-            
-            currentLevelIndex = 0;
-            score = 0;
-            loadLevel(0);
-        }
     </script>
 </body>
 </html>
