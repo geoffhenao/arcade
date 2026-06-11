@@ -587,24 +587,24 @@
     <script>
         const COLORS = {
             BLUE: [
-                { type: 'BLUE',   name: 'BLUE LOGO A',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
-                { type: 'BLUE',   name: 'BLUE LOGO B',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' }
+                { type: 'HIGH FLYER',   name: 'RED WRESTLER 1',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
+                { type: 'HIGH FLYER',   name: 'RED WRESTLER 2',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' }
             ],
             RED: [
-                { type: 'RED',    name: 'RED HERO A',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
-                { type: 'RED',    name: 'RED HERO B',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
+                { type: 'HARDCORE',    name: 'BLUE WRESTLER 1',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
+                { type: 'HARDCORE',    name: 'BLUE WRESTLER 2',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
             ],
             GREEN: [
-                { type: 'GREEN',  name: 'GREEN GEM A',   img: 'images/green_brand_1.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
-                { type: 'GREEN',  name: 'GREEN GEM B',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
+                { type: 'TECHNICIAN',  name: 'GREEN WRESTLER 1',   img: 'images/green_brand_1.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
+                { type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 2',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
             ],
             YELLOW: [
-                { type: 'YELLOW', name: 'YELLOW GOLD A', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
-                { type: 'YELLOW', name: 'YELLOW GOLD B', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
+                { type: 'BRAWLER', name: 'YELLOW GOLD A', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
+                { type: 'BRAWLER', name: 'YELLOW GOLD B', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
             ],
             SPECIAL: [
-                { type: 'SPECIAL', name: 'WILD CARD A',   img: 'images/special_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
-                { type: 'SPECIAL', name: 'WILD CARD B',   img: 'images/special_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
+                { type: 'MANAGER', name: 'WILD CARD A',   img: 'images/special_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
+                { type: 'MANAGER', name: 'WILD CARD B',   img: 'images/special_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
             ]
         };
 
@@ -668,7 +668,7 @@
             data.slice(0, 6).forEach((entry, idx) => {
                 let entryEl = document.createElement('div');
                 entryEl.className = `leaderboard-entry ${idx === 0 ? 'top-spot' : ''}`;
-                let flag = idx === 0 ? '<span style="margin-right: 6px;">🚩</span>' : '';
+                let flag = idx === 0 ? '<span style="margin-right: 6px;"><img src="https://geoffhenao.github.io/wrestlepath/images/8-bit-binterman-T.png" width="20" height="20"></span>' : '';
 
                 entryEl.innerHTML = `
                     <span>${flag}${idx + 1}. ${entry.name}</span>
