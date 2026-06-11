@@ -575,28 +575,33 @@
     <script>
         const COLORS = {
             BLUE: [
-                { symbol: 'B', type: 'HIGH FLYER',   name: 'RED WRESTLER 1',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
-                { symbol: 'B', type: 'HIGH FLYER',   name: 'RED WRESTLER 2',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' }
+                { symbol: 'B', type: 'HIGH FLYER',   name: 'BLUE WRESTLER 1',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
+                { symbol: 'B', type: 'HIGH FLYER',   name: 'BLUE WRESTLER 2',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
+                { symbol: 'B', type: 'HIGH FLYER',    name: 'BLUE WRESTLER 3',    img: 'images/red_brand_3.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
             ],
             RED: [
-                { symbol: 'R', type: 'HARDCORE',    name: 'BLUE WRESTLER 1',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
-                { symbol: 'R', type: 'HARDCORE',    name: 'BLUE WRESTLER 2',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
+                { symbol: 'R', type: 'HARDCORE',    name: 'RED WRESTLER 1',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
+                { symbol: 'R', type: 'HARDCORE',    name: 'RED WRESTLER 2',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
+                { symbol: 'R', type: 'HARDCORE',    name: 'RED WRESTLER 3',    img: 'images/red_brand_3.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
             ],
             GREEN: [
                 { symbol: 'G', type: 'TECHNICIAN',  name: 'GREEN WRESTLER 1',   img: 'images/green_brand_1.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
-                { symbol: 'G', type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 2',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
+                { symbol: 'G', type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 2',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
+                { symbol: 'G', type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 3',   img: 'images/green_brand_3.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
             ],
             YELLOW: [
-                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW GOLD A', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
-                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW GOLD B', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
+                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW WRESTLER 1', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
+                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW WRESTLER 2', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
+                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW WRESTLER 3', img: 'images/yellow_brand_3.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
             ],
-            SPECIAL: [
-                { symbol: 'W', type: 'MANAGER', name: 'WILD CARD A',   img: 'images/special_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
-                { symbol: 'W', type: 'MANAGER', name: 'WILD CARD B',   img: 'images/special_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
+            WILD: [
+                { symbol: 'W', type: 'MANAGER', name: 'WILD WRESTLER 1',   img: 'images/wild_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
+                { symbol: 'W', type: 'MANAGER', name: 'WILD WRESTLER 2',   img: 'images/wild_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
+                { symbol: 'W', type: 'MANAGER', name: 'WILD WRESTLER 3',   img: 'images/wild_brand_3.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
             ]
         };
 
-        const COLOR_POOL = ['BLUE', 'BLUE', 'RED', 'RED', 'GREEN', 'GREEN', 'YELLOW', 'YELLOW', 'SPECIAL']; 
+        const COLOR_POOL = ['BLUE', 'RED', 'GREEN', 'YELLOW', 'WILD', 'BLUE', 'RED', 'GREEN', 'YELLOW', 'WILD', 'BLUE', 'RED', 'GREEN', 'YELLOW']; 
 
         const GAME_LEVELS = [ // This is where I can build out the objectives for new levels.
             {
@@ -891,7 +896,7 @@
                 case 'G': return COLORS.GREEN[0];
                 case 'Y': return COLORS.YELLOW[0];
                 case 'S':
-                default: return COLORS.SPECIAL[0];
+                default: return COLORS.WILD[0];
             }
         }
 
@@ -926,7 +931,7 @@
                 let dot = document.createElement('div');
                 dot.className = 'chain-dot';
                 dot.style.backgroundColor = cellData.variantData.color;
-                dot.style.color = cellData.type === 'SPECIAL' ? '#000' : '#fff';
+                dot.style.color = cellData.type === 'WILD' ? '#000' : '#fff';
                 dot.innerText = cellData.variantData.symbol;
                 chainDisplay.appendChild(dot);
             });
