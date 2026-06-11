@@ -405,7 +405,7 @@
             justify-content: center;
             font-weight: bold;
             font-size: 10px;
-            color: #fff;
+            color: #000;
         }
 
         .leaderboard-list {
@@ -946,7 +946,7 @@
                 obj.target.forEach((char, cIdx) => {
                     let visualProfile = getStyleDataByChar(char);
                     sequenceHTML += `
-                        <div class="objective-dot" style="background-color: ${visualProfile.color}; color: ${char === 'S' ? '#000' : '#fff'}">
+                        <div class="objective-dot" style="background-color: ${visualProfile.color}; color: ${char === 'S' ? '#fff' : '#000'}">
                             ${char}
                         </div>
                     `;
