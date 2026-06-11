@@ -288,19 +288,7 @@
             animation: neonPulse 0.5s ease-in-out 3;
         }
 
-        /* --- CONNECTORS AND BADGES --- */
-        .chain-connector {
-            position: absolute;
-            z-index: 1; 
-            border: 2px solid #111; 
-            box-shadow: 0 0 5px #000;
-            pointer-events: none;
-        }
-        
-        .connect-right { top: 50%; left: 50%; width: calc(100% + 6px); height: 14px; transform: translateY(-50%); }
-        .connect-left  { top: 50%; right: 50%; width: calc(100% + 6px); height: 14px; transform: translateY(-50%); }
-        .connect-down  { left: 50%; top: 50%; height: calc(100% + 6px); width: 14px; transform: translateX(-50%); }
-        .connect-up    { left: 50%; bottom: 50%; height: calc(100% + 6px); width: 14px; transform: translateX(-50%); }
+        /* --- BADGES --- */
 
         .combo-badge {
             position: absolute;
@@ -587,37 +575,37 @@
     <script>
         const COLORS = {
             BLUE: [
-                { type: 'HIGH FLYER',   name: 'RED WRESTLER 1',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
-                { type: 'HIGH FLYER',   name: 'RED WRESTLER 2',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' }
+                { symbol: 'B', type: 'HIGH FLYER',   name: 'RED WRESTLER 1',   img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' },
+                { symbol: 'B', type: 'HIGH FLYER',   name: 'RED WRESTLER 2',   img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.6)' }
             ],
             RED: [
-                { type: 'HARDCORE',    name: 'BLUE WRESTLER 1',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
-                { type: 'HARDCORE',    name: 'BLUE WRESTLER 2',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
+                { symbol: 'R', type: 'HARDCORE',    name: 'BLUE WRESTLER 1',    img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' },
+                { symbol: 'R', type: 'HARDCORE',    name: 'BLUE WRESTLER 2',    img: 'images/red_brand_2.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.6)' }
             ],
             GREEN: [
-                { type: 'TECHNICIAN',  name: 'GREEN WRESTLER 1',   img: 'images/green_brand_1.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
-                { type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 2',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
+                { symbol: 'G', type: 'TECHNICIAN',  name: 'GREEN WRESTLER 1',   img: 'images/green_brand_1.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' },
+                { symbol: 'G', type: 'TECHNICNIAN',  name: 'GREEN WRESTLER 2',   img: 'images/green_brand_2.png', color: '#008000', glowFade: 'rgba(0, 153, 0, 0.6)' }
             ],
             YELLOW: [
-                { type: 'BRAWLER', name: 'YELLOW GOLD A', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
-                { type: 'BRAWLER', name: 'YELLOW GOLD B', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
+                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW GOLD A', img: 'images/yellow_brand_1.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' },
+                { symbol: 'Y', type: 'BRAWLER', name: 'YELLOW GOLD B', img: 'images/yellow_brand_2.png', color: '#f1c40f', glowFade: 'rgba(241, 196, 15, 0.6)' }
             ],
             SPECIAL: [
-                { type: 'MANAGER', name: 'WILD CARD A',   img: 'images/special_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
-                { type: 'MANAGER', name: 'WILD CARD B',   img: 'images/special_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
+                { symbol: 'S', type: 'MANAGER', name: 'WILD CARD A',   img: 'images/special_brand_1.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' },
+                { symbol: 'S', type: 'MANAGER', name: 'WILD CARD B',   img: 'images/special_brand_2.png', color: '#ffffff', glowFade: 'rgba(255, 255, 255, 0.6)' }
             ]
         };
 
         const COLOR_POOL = ['BLUE', 'BLUE', 'RED', 'RED', 'GREEN', 'GREEN', 'YELLOW', 'YELLOW', 'SPECIAL']; 
 
-        const GAME_LEVELS = [
+        const GAME_LEVELS = [ // This is where I can build out the objectives for new levels.
             {
                 level: 1,
                 name: "LEVEL 1",
                 sequences: [
                     { target: ["R", "G", "Y"], completed: false },
                     { target: ["B", "R", "G"], completed: false },
-                    { target: ["R", "B", "G", "Y"], completed: false }
+                    { target: ["R", "B", "G", "Y"], completed: false },
                 ]
             },
             {
@@ -626,7 +614,8 @@
                 sequences: [
                     { target: ["B", "B", "Y"], completed: false },
                     { target: ["G", "R", "Y", "B"], completed: false },
-                    { target: ["Y", "G", "R"], completed: false }
+                    { target: ["Y", "G", "R"], completed: false },
+                    { target: ["S", "R", "Y", "G"], completed: false },
                 ]
             }
         ];
@@ -668,7 +657,7 @@
             data.slice(0, 6).forEach((entry, idx) => {
                 let entryEl = document.createElement('div');
                 entryEl.className = `leaderboard-entry ${idx === 0 ? 'top-spot' : ''}`;
-                let flag = idx === 0 ? '<span style="margin-right: 6px;"><img src="https://geoffhenao.github.io/wrestlepath/images/8-bit-binterman-T.png" width="20" height="20"></span>' : '';
+                let flag = idx === 0 ? '<span style="margin-right: 6px;"><img src="https://geoffhenao.github.io/wrestlepath/images/8-bit-binterman-25.png" width="20" height="20"></span>' : '';
 
                 entryEl.innerHTML = `
                     <span>${flag}${idx + 1}. ${entry.name}</span>
@@ -901,7 +890,7 @@
                 dot.className = 'chain-dot';
                 dot.style.backgroundColor = cellData.variantData.color;
                 dot.style.color = cellData.type === 'SPECIAL' ? '#000' : '#fff';
-                dot.innerText = cellData.type[0];
+                dot.innerText = cellData.variantData.symbol;
                 chainDisplay.appendChild(dot);
             });
 
@@ -1003,11 +992,9 @@
         }
 
         function evaluateSequences() {
-            let builtStringArray = currentChain.map(coord => {
-                let type = boardState[coord.r][coord.c].type;
-                if (type === 'SPECIAL') return 'S'; 
-                return type[0]; 
-            });
+let builtStringArray = currentChain.map(coord => {
+    return boardState[coord.r][coord.c].variantData.symbol; 
+});
 
             let matchedAny = false;
 
@@ -1080,20 +1067,7 @@
                                     badge.innerHTML = badgeHTML;
                                     cellEl.appendChild(badge);
 
-                                    // Spawn the Connectors to link the tiles
-                                    if (i < clearChainRef.length - 1) {
-                                        let next = clearChainRef[i+1];
-                                        let connector = document.createElement('div');
-                                        connector.className = 'chain-connector';
-                                        connector.style.backgroundColor = cellData.variantData.color;
-
-                                        if (next.c === coord.c + 1) connector.classList.add('connect-right');
-                                        else if (next.c === coord.c - 1) connector.classList.add('connect-left');
-                                        else if (next.r === coord.r + 1) connector.classList.add('connect-down');
-                                        else if (next.r === coord.r - 1) connector.classList.add('connect-up');
-                                        
-                                        cellEl.appendChild(connector);
-                                    }
+                                  
                                     updateUI();
                                 }
                             }, 1200);
