@@ -365,6 +365,7 @@
             justify-content: center;
             font-weight: bold;
             font-size: 11px;
+            font-color: #000;
         }
 
         .objective-item {
@@ -931,7 +932,7 @@
                 let dot = document.createElement('div');
                 dot.className = 'chain-dot';
                 dot.style.backgroundColor = cellData.variantData.color;
-                dot.style.color = cellData.type === 'WILD' ? '#000' : '#fff';
+                dot.style.color = cellData.type === 'WILD' ? '#fff' : '#000';
                 dot.innerText = cellData.variantData.symbol;
                 chainDisplay.appendChild(dot);
             });
