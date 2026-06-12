@@ -169,6 +169,14 @@
         }
         .hq-grid-art { width: 100%; height: 100%; object-fit: cover; object-position: top center; user-select: none; position: relative; z-index: 2; }
 
+        /* COMPLETED MATCH WRESTLE NAME OVERLAY */
+        .grid-name-overlay {
+            position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+            font-size: 9px; font-weight: bold; font-family: monospace; text-align: center;
+            z-index: 6; pointer-events: none; width: 95%; white-space: nowrap; overflow: hidden;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
         /* HIGH SPOT ANIMATION & STYLING */
         .high-spot-text {
             position: absolute; font-size: 12px; font-weight: bold; letter-spacing: 1px;
@@ -237,7 +245,6 @@
             color: #ffffff; text-shadow: 0 0 8px #000; z-index: 5; pointer-events: none; font-family: monospace;
         }
         
-        /* Start text stays visible, but dims when card is placed */
         .grid-space.start-locked::after {
             content: "START"; position: absolute; font-size: 14px; font-weight: bold; letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.6); text-shadow: 0 0 8px #000; z-index: 5; pointer-events: none; font-family: monospace;
@@ -302,6 +309,7 @@
         .keyboard-area {
             display: flex; flex-direction: column; gap: 8px; background: #000; padding: 5px 15px 20px;
         }
+        .keyboard-area button { margin-top: 0; }
         .keyboard-row { display: flex; justify-content: center; gap: 8px; }
         .key-btn {
             width: 45px; height: 45px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
@@ -340,7 +348,7 @@
         }
     </style>
 </head>
-<body>
+<body onclick="closePlusMenu(event)">
 
     <div class="game-layout">
         
@@ -408,9 +416,9 @@
                         <div class="key-btn key-w" id="key-W">W</div>
                     </div>
                     <div class="keyboard-row" style="margin-top: 10px;">
-                        <button class="modal-btn" style="margin-top: 0; padding: 8px 12px; font-size: 10px; flex: 1;" onclick="openRules()">RULES</button>
-                        <button class="modal-btn" style="margin-top: 0; padding: 8px 12px; font-size: 10px; flex: 1;" onclick="resetLevel()">RESTART</button>
-                        <button class="modal-btn" style="margin-top: 0; padding: 8px 12px; font-size: 10px; flex: 1;" onclick="openMainMenuConfirm()">MENU</button>
+                        <button class="modal-btn" style="padding: 8px 12px; font-size: 10px; flex: 1;" onclick="openRules()">RULES</button>
+                        <button class="modal-btn" style="padding: 8px 12px; font-size: 10px; flex: 1;" onclick="resetLevel()">RESTART</button>
+                        <button class="modal-btn" style="padding: 8px 12px; font-size: 10px; flex: 1;" onclick="openMainMenuConfirm()">MENU</button>
                     </div>
                 </div>
             </div>
@@ -467,7 +475,7 @@
             BLUE: [
                 { uid: 'B1', symbol: 'B', type: 'FLYER', name: 'AERO STAR', home: 'Mexico City, MX', special: 'Springboard Cutter', finisher: '630 Splash', accolades: 'Cruiserweight Champ', img: 'images/blue_brand_1.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.4)' },
                 { uid: 'B2', symbol: 'B', type: 'FLYER', name: 'GRAVITY BOY', home: 'Los Angeles, CA', special: 'Hurricanrana', finisher: 'Shooting Star Press', accolades: 'Tag Team Champ', img: 'images/blue_brand_2.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.4)' },
-                { uid: 'B3', symbol: 'B', type: 'FLYER', name: 'SKY WALKER', home: 'Tokyo, JPN', special: 'Moonsault', finisher: 'Phoenix Splash', accolades: 'Best of the Super J', img: 'images/blue_brand_3.png', color: '#336699', glowFade: 'rgba(51, 0, 0, 0.4)' } 
+                { uid: 'B3', symbol: 'B', type: 'FLYER', name: 'SKY WALKER', home: 'Tokyo, JPN', special: 'Moonsault', finisher: 'Phoenix Splash', accolades: 'Best of the Super J', img: 'images/blue_brand_3.png', color: '#336699', glowFade: 'rgba(51, 102, 153, 0.4)' } 
             ],
             RED: [
                 { uid: 'R1', symbol: 'R', type: 'HARDCORE', name: 'BARB WIRE', home: 'Philadelphia, PA', special: 'Chair Shot', finisher: 'Table Powerbomb', accolades: 'Deathmatch King', img: 'images/red_brand_1.png',  color: '#ff0000', glowFade: 'rgba(255, 0, 0, 0.4)' },
@@ -503,6 +511,7 @@
                 level: 1, name: "LEVEL 1", subtitle: "Live from the High School Gym!", promoterUid: "P1", targetScore: 100,
                 intro: "Rookie, the crowd is dead tonight. We need to wake them up. Get these matches booked exactly as I send them to you!",
                 failText: "This is a disaster! The crowd is literally leaving! We're ruined!",
+                winText: "Not bad for your first night! The crowd is actually on their feet.",
                 sequences: [
                     { target: ["R1", "G", "Y"], completed: false, chatPhase: 0 }, 
                     { target: ["B", "R", "G"], highSpotTarget: "B", completed: false, chatPhase: 0 }, 
@@ -514,6 +523,7 @@
                 level: 2, name: "LEVEL 2", subtitle: "Live from the Bingo Hall!", promoterUid: "P1", targetScore: 250,
                 intro: "The network executives are here. Set up these complex multi-man tag matches and integrate those wildcard managers to maximize the hype!",
                 failText: "The network just called... they're pulling our television deal. It's over.",
+                winText: "Incredible! Ratings just went through the roof. You're a natural booker.",
                 sequences: [
                     { target: ["B", "B", "Y"], completed: false, chatPhase: 0 }, 
                     { target: ["B", "R", "G"], completed: false, chatPhase: 0 },
@@ -527,6 +537,7 @@
                 level: 3, name: "LEVEL 3", subtitle: "Live from the Arena!", promoterUid: "P2", targetScore: 350,
                 intro: "The champions are demanding better storylines. You'll need to use every resource available. Don't let me down.",
                 failText: "That was a catastrophe. The champions just walked out with the belts.",
+                winText: "They didn't see that coming! The pay-per-view buys are skyrocketing.",
                 sequences: [
                     { target: ["B", "G", "R"], completed: false, chatPhase: 0 }, 
                     { target: ["W", "G", "Y"], completed: false, chatPhase: 0 },
@@ -540,6 +551,7 @@
                 level: 4, name: "LEVEL 4", subtitle: "WrestlePath's Biggest Show!", promoterUid: "P2", targetScore: 450,
                 intro: "Main event time. WrestlePath's biggest show of the year. The board is going to get tight. Book perfectly.",
                 failText: "You choked on the grandest stage of them all. You're fired.",
+                winText: "You are a legendary booker! Best event in the history of the company!",
                 sequences: [
                     { target: ["R", "G", "Y"], completed: false, chatPhase: 0 }, 
                     { target: ["W", "W", "G"], completed: false, chatPhase: 0 },
@@ -719,6 +731,15 @@
             return variantArray[Math.floor(Math.random() * variantArray.length)];
         }
 
+        // Updated helper function to parse hex values to text names safely
+        function getRawHexName(hex) {
+            if (hex === '#ff0000') return 'HARDCORE';
+            if (hex === '#336699') return 'FLYER';
+            if (hex === '#008000') return 'TECHNICIAN';
+            if (hex === '#f1c40f') return 'BRAWLER';
+            return 'WILD';
+        }
+
         function drawCardAtIndex(index) {
             let newCard = getRandomCard();
             currentHand[index] = newCard;
@@ -747,7 +768,7 @@
                 switch(val) {
                     case 'R': return '<span style="color: #ff0000; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">HARDCORE</span>';
                     case 'B': return '<span style="color: #336699; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">FLYER</span>';
-                    case 'G': return '<span style="color: #008000; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">TECHNICIAN</span>';
+                    case 'G': return '<span style="color: #008000; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">TECHNICIAN</span>'; // Fixed fallback mismatch
                     case 'Y': return '<span style="color: #f1c40f; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">BRAWLER</span>';
                     case 'W': default: return '<span style="color: #ffffff; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">WILDCARD</span>';
                 }
@@ -889,9 +910,9 @@
                     objContainer.appendChild(reqBubble);
 
                     if (obj.completed) {
-                        
                         if (obj.chatPhase >= 1) {
-                            let bookedNamesHTML = obj.completedChainData.map(c => {
+                            let displayChain = obj.completedChainData.slice(-obj.target.length); 
+                            let bookedNamesHTML = displayChain.map(c => {
                                 let isMatch = obj.target.includes(c.uid) || obj.target.includes(c.symbol) || obj.target.includes('W');
                                 let dimStyle = isMatch ? '' : 'opacity: 0.4; filter: grayscale(0.8);';
                                 return `<span style="color:${c.color}; font-weight:bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; ${dimStyle}">${c.name}</span>`;
@@ -971,18 +992,18 @@
 
             if (levelPhase === "gameover" || levelPhase === "cleared") return;
 
-            if (currentChain.length > 0) {
-                let startCoord = currentChain[0];
-                document.getElementById(`space-${startCoord.r}-${startCoord.c}`).classList.add('start-locked');
+            // Permanent locked text behavior on the initial node coordinate strictly
+            let initialSpaceEl = document.getElementById(`space-${randomStartPos.r}-${randomStartPos.c}`);
+            if (currentChain.length > 0 || playerPos !== null) {
+                initialSpaceEl.classList.add('start-locked');
             }
 
             if (playerPos === null) {
-                let el = document.getElementById(`space-${randomStartPos.r}-${randomStartPos.c}`);
                 if (selectedCardIndex === null) {
-                    el.classList.add('valid-move', 'start-anim'); 
+                    initialSpaceEl.classList.add('valid-move', 'start-anim'); 
                 } else {
-                    el.classList.add('valid-move', 'start-static'); 
-                    el.style.setProperty('--active-glow-color', currentHand[selectedCardIndex].color);
+                    initialSpaceEl.classList.add('valid-move', 'start-static'); 
+                    initialSpaceEl.style.setProperty('--active-glow-color', currentHand[selectedCardIndex].color);
                 }
                 return; 
             } 
@@ -1157,6 +1178,7 @@
                         }
                     });
 
+                    // Explicit Wildcard check completely overrides clone reactions per rules
                     if (wildcardUsedForUid) {
                         let wr = ["Wasn't exactly what I was looking for, but it still worked.", "I guess that wild card covers up the fact we didn't get who we wanted.", "Not the specific talent I asked for, but the crowd didn't riot."];
                         obj.reaction = wr[Math.floor(Math.random() * wr.length)];
@@ -1174,8 +1196,18 @@
                     let affirmations = ["I got you!", "No problem!", "Hell yeah, what's next?", "All good!"];
                     obj.affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
 
+                    // Keep entire chain data for point calculation but clear current workspace
+                    obj.completedChainData = clearChainRef.map(coord => boardState[coord.r][coord.c].variantData);
+
                     currentChain = []; 
                     updateHype();
+
+                    // Generate badges and text name overlays dynamically on completed slots
+                    let badgeHTML = '';
+                    obj.target.forEach(char => {
+                        let vis = getStyleDataByChar(char);
+                        badgeHTML += `<div class="mini-dot" style="background-color: ${vis.color}; color: ${char === 'W' ? '#000' : '#fff'};">${char.substring(0,1)}</div>`;
+                    });
 
                     clearChainRef.forEach((coord) => {
                         let cellEl = document.getElementById(`space-${coord.r}-${coord.c}`);
@@ -1184,10 +1216,25 @@
                         if (cellEl.classList.contains('player-here')) cellEl.classList.remove('player-here');
                         cellEl.classList.remove('placed-dim'); cellEl.classList.add('pulse-match');
                         
+                        // Overlay character meta details
+                        let nameLabel = document.createElement('div');
+                        nameLabel.className = 'grid-name-overlay';
+                        nameLabel.style.color = cellData.variantData.color;
+                        nameLabel.innerText = cellData.variantData.name.toUpperCase();
+                        cellEl.appendChild(nameLabel);
+
                         setTimeout(() => {
                             if(boardState[coord.r][coord.c].occupied) {
                                 cellEl.classList.remove('pulse-match'); cellEl.classList.add('completed');
                                 boardState[coord.r][coord.c].locked = true;
+                                
+                                // Restored badges engine placement
+                                let badge = document.createElement('div'); 
+                                badge.className = 'combo-badge';
+                                badge.style.setProperty('--match-color', cellData.variantData.color); 
+                                badge.innerHTML = badgeHTML;
+                                cellEl.appendChild(badge);
+                                
                                 updateUI();
                             }
                         }, 1200);
@@ -1234,7 +1281,7 @@
                 let namesHTML = displayChain.map(cData => {
                     return `<span style="color: ${cData.variantData.color}; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; font-weight: bold;">${cData.variantData.name}</span>`;
                 }).join(', ');
-                chainBubble.innerHTML = `How about... ${namesHTML}?`;
+                chainBubble.innerHTML = `How about... ${namesHTML}`;
                 chatHistory.appendChild(chainBubble);
             }
 
@@ -1257,21 +1304,25 @@
             document.getElementById('hypeFill').style.width = '0%';
             document.getElementById('hypeValue').innerText = '0%';
 
+            document.getElementById('keyboardPane').style.display = 'none';
+            document.getElementById('inputBar').style.display = 'none';
+
             setTimeout(() => {
                 document.getElementById('modalContent').innerHTML = `
                     <h2 style="color: #ff0000; margin-top: 0; font-family: monospace;">SHOW CANCELLED</h2>
                     <p style="font-size: 14px; color: #ccc; font-family: monospace;">The event was a catastrophe!</p>
-                    <button class=\"modal-btn\" onclick=\"document.getElementById('statusModal').style.display='none'; resetLevel()\">RETRY MISSION</button>
+                    <button class="modal-btn" onclick="document.getElementById('statusModal').style.display='none'; resetLevel()">RETRY MISSION</button>
                 `;
                 document.getElementById('statusModal').style.display = 'flex';
             }, 1500);
         }
 
         function triggerLevelClearedScreen() {
+            let winString = GAME_LEVELS[currentLevelIndex].winText || "The crowd is eating out of the palm of your hand!";
             document.getElementById('modalContent').innerHTML = `
                 <h2 style="color: #00ff00; margin-top: 0; font-family: monospace;">LEVEL CLEARED!</h2>
-                <p style="font-family: monospace;">The crowd is eating out of the palm of your hand!</p>
-                <button class=\"modal-btn\" onclick=\"document.getElementById('statusModal').style.display='none'; advanceLevel()\">PROCEED TO NEXT LEVEL</button>
+                <p style="font-family: monospace;">${winString}</p>
+                <button class="modal-btn" onclick="document.getElementById('statusModal').style.display='none'; advanceLevel()">PROCEED TO NEXT LEVEL</button>
             `;
             document.getElementById('statusModal').style.display = 'flex';
         }
@@ -1285,7 +1336,7 @@
             document.getElementById('modalContent').innerHTML = `
                 <h2 style="color: #f1c40f; margin-top: 0; font-family: monospace;">🏆 CAMPAIGN COMPLETE 🏆</h2>
                 <p style="font-family: monospace;">You successfully booked the greatest event in WrestlePath history!</p>
-                <button class=\"modal-btn\" onclick=\"document.getElementById('statusModal').style.display='none'; currentLevelIndex=0; loadLevel(0);\">PLAY AGAIN</button>
+                <button class="modal-btn" onclick="document.getElementById('statusModal').style.display='none'; currentLevelIndex=0; loadLevel(0);">PLAY AGAIN</button>
             `;
             document.getElementById('statusModal').style.display = 'flex';
         }
