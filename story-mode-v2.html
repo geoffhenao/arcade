@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200, user-scalable=no">
+    <meta name="viewport" content="width=1200, user-scalable=no, viewport-fit=cover">
     <title>[WRESTLEPATH: STORY MODE]</title>
     <style>
         :root {
@@ -33,14 +33,15 @@
             overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
 
-        /* === CSS GRID LAYOUT === */
+        /* === CSS GRID LAYOUT - PERCENTAGE SCALING === */
         .game-layout {
             display: grid;
-            grid-template-columns: minmax(450px, 42vw) auto minmax(320px, 360px);
-            grid-template-rows: auto 1fr;
+            grid-template-columns: 35% minmax(0, 1fr) 28%; /* Forces strictly proportional scaling */
+            grid-template-rows: auto minmax(0, 1fr);
             gap: 1.5vh 2vw;
-            max-width: 1900px; 
+            max-width: 1800px; 
             width: 100%; height: 96vh;
+            margin: 0 auto;
         }
 
         .title-area {
@@ -71,7 +72,7 @@
         .contacts-app-inner { display: flex; height: 100%; width: 100%; }
         
         .contacts-sidebar { 
-            flex: 0 0 240px; 
+            flex: 0 0 220px; 
             background: #000; border-right: 1px solid #222; 
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
@@ -125,7 +126,7 @@
         .dummy-card { filter: blur(3.5px) opacity(0.3); pointer-events: none; background: transparent !important; border-bottom: 1px solid transparent !important; }
 
         .contacts-detail { 
-            flex: 1; background: #1a1a1c; padding: 15px; 
+            flex: 1; background: #1a1a1c; padding: 15px; overflow-y: auto;
             display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
         }
 
@@ -152,13 +153,20 @@
         .info-value { color: #fff; font-size: 14px; font-weight: bold;}
 
         /* === 2. CENTER COLUMN: THE GRID === */
-        .center-column { grid-column: 2; grid-row: 2; display: flex; align-items: flex-start; justify-content: center; height: 100%; }
+        .center-column { 
+            grid-column: 2; grid-row: 2; 
+            display: flex; align-items: center; justify-content: center; 
+            height: 100%; width: 100%; 
+            overflow: hidden; 
+        }
 
         .grid-board {
             display: grid; grid-template-rows: repeat(8, 1fr); grid-template-columns: repeat(8, 1fr);
             gap: 1%; background-color: #0c0c0c; padding: 1.5%;
             border: 4px solid var(--yellow-jeopardy); border-radius: 12px;
-            height: 100%; aspect-ratio: 1 / 1; max-width: 100%;
+            /* Ensures it shrinks down correctly but never distorts its square shape */
+            max-width: 100%; max-height: 100%;
+            aspect-ratio: 1 / 1; 
         }
 
         .grid-space {
@@ -179,8 +187,8 @@
         /* HIGH SPOT ANIMATION & STYLING */
         .high-spot-text {
             position: absolute; 
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 100%;
+            top: 50%; left: 50%; transform: translate(-50%, -50%); /* Locks to center instantly */
+            width: 100%; /* Prevents accidental wrapping */
             font-size: 12px; font-weight: bold; letter-spacing: 1px;
             font-family: monospace; z-index: 5; pointer-events: none;
             animation: hsCycle 1.5s infinite alternate; text-align: center;
@@ -337,80 +345,43 @@
         .modal-btn { background-color: transparent; border: 2px solid #fff; color: #fff; padding: 12px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; transition: all 0.2s; font-size: 14px; text-transform: uppercase; margin-top: 15px;}
         .modal-btn:hover { background-color: var(--yellow-jeopardy); color: #fff; border-color: var(--yellow-jeopardy); }
 
-        /* Splash Screen Shared CSS */
         .splash-content {
             background: #111; border: 4px solid var(--yellow-jeopardy); padding: 30px; border-radius: 8px; 
             text-align: center; box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); 
             display: flex; flex-direction: column; gap: 15px; width: 100%;
         }
 
-        /* ========================================== */
-        /* CHANGE SPLASH BOX SIZE HERE                */
-        /* Adjust max-width to change how wide the    */
-        /* combo and victory popup screens can get.   */
-        /* ========================================== */
-        .splash-box-combo {
-            max-width: 600px; 
-        }
-        .splash-box-victory {
-            max-width: 850px; 
-        }
+        .splash-box-combo { max-width: 600px; }
+        .splash-box-victory { max-width: 850px; }
         
-        .splash-image-container {
-            display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; flex-wrap: wrap;
-        }
-        .splash-img-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-        }
-        .splash-img {
-            width: 120px; height: 120px; object-fit: cover; object-position: top center;
-            border: 3px solid; border-radius: 8px; background: #000;
-        }
-        .splash-name {
-            font-size: 11px; font-weight: bold; font-family: monospace; text-transform: uppercase;
-            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-        }
+        .splash-image-container { display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; flex-wrap: wrap; }
+        .splash-img-wrapper { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .splash-img { width: 120px; height: 120px; object-fit: cover; object-position: top center; border: 3px solid; border-radius: 8px; background: #000; }
+        .splash-name { font-size: 11px; font-weight: bold; font-family: monospace; text-transform: uppercase; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
 
-        /* Slide In/Out Keyframes for the Dynamic Modals */
-        @keyframes slideInRight {
-            from { transform: translateX(100vw); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOutLeft {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(-100vw); opacity: 0; }
-        }
+        @keyframes slideInRight { from { transform: translateX(100vw); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100vw); opacity: 0; } }
 
-        /* === MOBILE STACKING === 
-        @media (max-width: 1024px) {
-            body { padding: 10px; height: auto; overflow: auto; }
-            .game-layout { display: flex; flex-direction: column; height: auto; max-width: 100%; gap: 15px; }
-            .title-area { display: contents; } 
-            
-            #boardTitle { order: 1; margin-top: 10px; }
-            .right-column { order: 2; height: 60vh; min-height: 500px; }
-            .hype-container { order: 3; margin-top: 15px;}
-            .center-column { order: 4; height: auto; padding: 0; }
-            .left-column { order: 5; height: 60vh; min-height: 500px; margin-bottom: 20px;}
-        } */
-
-                /* === LANDSCAPE LOCK === */
+        /* === LANDSCAPE LOCK === */
         #landscape-lock {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; font-family: monospace; padding: 20px;
         }
-        @media screen and (orientation: portrait) and (max-width: 900px) {
+        /* Lock screen only appears if device is held vertically (portrait) */
+        @media screen and (orientation: portrait) {
             #landscape-lock { display: flex; }
-            .game-layout { display: none; }
+            .game-layout { display: none !important; }
         }
     </style>
 </head>
 <body>
+
     <div id="landscape-lock">
-        <h2 style="color: var(--yellow-jeopardy); margin-bottom: 10px;">PLEASE ROTATE YOUR DEVICE</h2>
-        <p style="color: #fff; font-size: 14px;">[WRESTLEPATH: STORY MODE] requires landscape orientation.</p>
+        <h2 style="color: var(--yellow-jeopardy); margin-bottom: 10px; font-family: monospace;">PLEASE ROTATE YOUR DEVICE</h2>
+        <p style="color: #fff; font-size: 14px; font-family: monospace;">WrestlePath Story Mode requires a landscape orientation to play.</p>
     </div>
+
     <div class="game-layout">
         
         <div class="title-area">
@@ -650,7 +621,7 @@
         let levelUsedUIDs = []; 
         let isScrollingList = false;
         let levelBonusAwarded = false;
-        let levelWinningRoster = []; // Captures all successful characters sequentially
+        let levelWinningRoster = [];
 
         window.onload = function() {
             buildBoardHTML();
@@ -1152,8 +1123,11 @@
             
             isScrollingList = true;
             evaluateSequences();
+            
+            // 1. UPDATE UI FIRST
             updateUI();
 
+            // 2. TRIGGER FLASH ANIMATION AFTER UI UPDATES
             let keyEl = document.getElementById(`key-${sym}`);
             if(keyEl) {
                 keyEl.classList.add(`active-${sym.toLowerCase()}`);
@@ -1285,12 +1259,8 @@
                     let affirmations = ["I got you!", "No problem!", "Hell yeah, what's next?", "All good!"];
                     obj.affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
 
-                    // Track ALL winning characters sequentially for end-of-level victory splash
                     levelWinningRoster.push(...obj.completedChainData);
 
-                    // ===============================================
-                    // FIRE THE DYNAMIC MID-LEVEL COMBO SPLASH
-                    // ===============================================
                     let splashHTML = '';
                     obj.completedChainData.forEach(card => {
                         splashHTML += `
@@ -1303,18 +1273,15 @@
                     let comboSplash = document.getElementById('comboSplashOverlay');
                     let comboContent = document.getElementById('comboSplashContent');
                     
-                    // Slide In
-                    comboContent.style.animation = 'slideInRight 0.1s ease-out forwards';
+                    comboContent.style.animation = 'slideInRight 0.4s ease-out forwards';
                     comboSplash.style.display = 'flex';
                     
-                    // Auto Hide after 2.5 seconds (slides out to the left)
                     setTimeout(() => {
-                        comboContent.style.animation = 'slideOutLeft 0.1s ease-in forwards';
+                        comboContent.style.animation = 'slideOutLeft 0.4s ease-in forwards';
                         setTimeout(() => {
                             comboSplash.style.display = 'none';
-                        }, 100); // Matches animation duration, e.g. 0.1s = 100ms
-                    }, 800); // This affects how long splash stays on screen.
-                    // ===============================================
+                        }, 400); 
+                    }, 2500); 
 
                     currentChain = []; 
                     updateHype();
@@ -1435,7 +1402,6 @@
             let winString = GAME_LEVELS[currentLevelIndex].winText || "The crowd is eating out of the palm of your hand!";
             document.getElementById('victorySplashText').innerText = winString;
             
-            // Generate the dynamic HTML for EVERY winning character this level
             let victoryHTML = '';
             levelWinningRoster.forEach(card => {
                 victoryHTML += `
@@ -1446,7 +1412,6 @@
             });
             document.getElementById('victorySplashImages').innerHTML = victoryHTML;
             
-            // Fire the Victory Splash Screen
             let victorySplash = document.getElementById('victorySplashOverlay');
             let victoryContent = document.getElementById('victorySplashContent');
             victoryContent.style.animation = 'slideInRight 0.5s ease-out forwards';
