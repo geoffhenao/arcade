@@ -10,9 +10,12 @@
     </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1100, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=1366, user-scalable=no, viewport-fit=cover">
     <title>[WRESTLEPATH: STORY MODE]</title>
     <style>
         :root {
@@ -36,7 +39,6 @@
         /* === CSS GRID LAYOUT === */
         .game-layout {
             display: grid;
-            /* Fixed tight sides force the center column to expand as much as physically possible */
             grid-template-columns: 400px minmax(0, 1fr) 280px; 
             grid-template-rows: auto minmax(0, 1fr);
             gap: 1.5vh 20px;
@@ -73,7 +75,7 @@
         .contacts-app-inner { display: flex; height: 100%; width: 100%; }
         
         .contacts-sidebar { 
-            flex: 0 0 150px; /* Slimmed down to give details pane and board more room */
+            flex: 0 0 150px; 
             background: #000; border-right: 1px solid #222; 
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
@@ -165,8 +167,9 @@
             display: grid; grid-template-rows: repeat(8, 1fr); grid-template-columns: repeat(8, 1fr);
             gap: 1%; background-color: #0c0c0c; padding: 1.5%;
             border: 4px solid var(--yellow-jeopardy); border-radius: 12px;
-            /* Explicit width and max-height guarantees the flexbox allows it to expand beautifully */
-            width: 100%; 
+            /* Height prioritized to ensure the flexbox builds the largest possible square */
+            height: 100%; 
+            max-width: 100%;
             max-height: 100%;
             aspect-ratio: 1 / 1; 
         }
@@ -266,9 +269,11 @@
         /* === 3. RIGHT COLUMN: iMESSAGE UI === */
         .right-column { grid-column: 3; grid-row: 2; display: flex; flex-direction: column; gap: 10px; align-self: center; height: 65vh; }
         
+        /* Updated border, shadow, and radius to perfectly mirror .master-panel */
         .phone-interface-inner { 
-            flex: 1; min-height: 0; background: #000; border-radius: 30px; border: 8px solid #1a1a1a;
-            display: flex; flex-direction: column; position: relative; overflow: visible;
+            flex: 1; min-height: 0; background: var(--panel-bg); 
+            border-radius: 20px; border: 4px solid #2a2a2a; box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
         }
 
         .imessage-header {
@@ -459,7 +464,7 @@
             <h2 id="introTitle" style="color: var(--yellow-jeopardy); margin: 0; letter-spacing:2px; font-family: monospace;"></h2>
             <p id="introSubtitle" style="color: #fff; font-size: 16px; margin-top: -10px; font-family: monospace;"></p>
             <img id="introImage" src="" style="width: 100%; max-height: 200px; object-fit: contain; margin: 10px 0; border-radius: 8px; display: none;"> 
-            <button class="modal-btn" onclick="document.getElementById('introModal').style.display='none'; triggerLevelStart();">START LEVEL</button>
+                <button class="modal-btn" onclick="enterFullScreen(); document.getElementById('introModal').style.display='none'; triggerLevelStart();">START LEVEL</button>
         </div>
     </div>
 
@@ -629,6 +634,21 @@
             buildBoardHTML();
             loadLevel(0); 
         };
+                // Forces the browser into fullscreen mode across all device types
+        function enterFullScreen() {
+            let docEl = document.documentElement;
+            let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            
+            if (requestFullScreen) {
+                try {
+                    requestFullScreen.call(docEl).catch(err => {
+                        console.log("Fullscreen blocked by browser:", err.message);
+                    });
+                } catch (e) {
+                    requestFullScreen.call(docEl);
+                }
+            }
+        }
 
         function openRules() { document.getElementById('rules-modal').style.display = 'flex'; }
         function openMainMenuConfirm() { document.getElementById('mainMenuModal').style.display = 'flex'; }
