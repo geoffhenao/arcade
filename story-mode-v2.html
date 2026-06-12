@@ -167,7 +167,6 @@
             display: grid; grid-template-rows: repeat(8, 1fr); grid-template-columns: repeat(8, 1fr);
             gap: 1%; background-color: #0c0c0c; padding: 1.5%;
             border: 4px solid var(--yellow-jeopardy); border-radius: 12px;
-            /* Height prioritized to ensure the flexbox builds the largest possible square */
             height: 100%; 
             max-width: 100%;
             max-height: 100%;
@@ -269,7 +268,6 @@
         /* === 3. RIGHT COLUMN: iMESSAGE UI === */
         .right-column { grid-column: 3; grid-row: 2; display: flex; flex-direction: column; gap: 10px; align-self: center; height: 65vh; }
         
-        /* Updated border, shadow, and radius to perfectly mirror .master-panel */
         .phone-interface-inner { 
             flex: 1; min-height: 0; background: var(--panel-bg); 
             border-radius: 20px; border: 4px solid #2a2a2a; box-shadow: 0 10px 25px rgba(0,0,0,0.8);
@@ -329,33 +327,48 @@
         }
         .keyboard-area button { margin-top: 0; }
         .keyboard-row { display: flex; justify-content: center; gap: 8px; }
-        .key-btn {
-            width: 45px; height: 45px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            font-size: 16px; font-weight: bold; font-family: monospace; border: 2px solid #333; color: #888;
-            opacity: 0.3; transition: all 0.1s ease;
-        }
-        .key-r { background: #550000; border-color: #ff0000; color: #ff0000; }
-        .key-b { background: #113355; border-color: #336699; color: #336699; }
-        .key-g { background: #004400; border-color: #008000; color: #008000; }
-        .key-y { background: #554400; border-color: #f1c40f; color: #f1c40f; }
-        .key-w { background: #555555; border-color: #ffffff; color: #ffffff; }
-
-        .key-btn.active-r { background: #ff0000; color: #fff; border-color: #fff; box-shadow: 0 0 10px #ff0000; opacity: 1; transform: scale(1.1);}
-        .key-btn.active-g { background: #008000; color: #fff; border-color: #fff; box-shadow: 0 0 10px #008000; opacity: 1; transform: scale(1.1);}
-        .key-btn.active-b { background: #336699; color: #fff; border-color: #fff; box-shadow: 0 0 10px #336699; opacity: 1; transform: scale(1.1);}
-        .key-btn.active-y { background: #f1c40f; color: #fff; border-color: #fff; box-shadow: 0 0 10px #f1c40f; opacity: 1; transform: scale(1.1);}
-        .key-btn.active-w { background: #ffffff; color: #000; border-color: #fff; box-shadow: 0 0 10px #ffffff; opacity: 1; transform: scale(1.1);}
 
         /* === MODALS & SPLASH SCREENS === */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); justify-content: center; align-items: center; z-index: 50; padding: 20px; font-family: monospace;}
-        .modal-content { background: #111; border: 4px solid var(--yellow-jeopardy); padding: 30px; border-radius: 8px; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); display: flex; flex-direction: column; gap: 15px; }
-        .modal-btn { background-color: transparent; border: 2px solid #fff; color: #fff; padding: 12px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; transition: all 0.2s; font-size: 14px; text-transform: uppercase; margin-top: 15px;}
+        
+        /* FIX: Replaced explicit 100% width/height with top/bottom/left/right 0 to perfectly bound it on iOS Safari */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0, 0, 0, 0.9); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 9999; 
+            padding: 20px; 
+            font-family: monospace;
+        }
+        
+        /* FIX: Added max-height and auto-overflow so the modal physically cannot clip off the bottom */
+        .modal-content { 
+            background: #111; 
+            border: 4px solid var(--yellow-jeopardy); 
+            padding: 30px; 
+            border-radius: 8px; 
+            text-align: center; 
+            width: 100%; 
+            max-width: 450px; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            margin: auto; 
+            box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        
+        .modal-btn { background-color: transparent; border: 2px solid #fff; color: #fff; padding: 12px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; transition: all 0.2s; font-size: 14px; text-transform: uppercase; margin-top: 15px; flex-shrink: 0;}
         .modal-btn:hover { background-color: var(--yellow-jeopardy); color: #fff; border-color: var(--yellow-jeopardy); }
 
         .splash-content {
             background: #111; border: 4px solid var(--yellow-jeopardy); padding: 30px; border-radius: 8px; 
             text-align: center; box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); 
             display: flex; flex-direction: column; gap: 15px; width: 100%;
+            max-height: 85vh; overflow-y: auto; margin: auto; 
         }
 
         .splash-box-combo { max-width: 600px; }
@@ -371,32 +384,28 @@
 
         /* === LANDSCAPE LOCK === */
         #landscape-lock {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; font-family: monospace; padding: 20px;
         }
-                /* === iPHONE SCALING FIX === */
-        /* Targets short landscape screens (Phones) while ignoring Desktops and iPads */
-        @media (max-height: 850px) {
-            .left-column, .right-column {
-                height: 88vh; /* Stretches the panels vertically to utilize the empty space */
-            }
-            .contacts-sidebar {
-                overflow-y: auto; /* Adds a scroll mechanism just in case */
-            }
-            /* Keeps the scrollbar invisible for a clean UI */
-            .contacts-sidebar::-webkit-scrollbar {
-                display: none; 
-            }
-        }
-        /* Lock screen only appears if device is held vertically (portrait) */
         @media screen and (orientation: portrait) {
             #landscape-lock { display: flex; }
             .game-layout { display: none !important; }
         }
+        
+        /* === iPHONE SCALING FIX === */
+        @media (max-height: 850px) {
+            .left-column, .right-column { height: 88vh; }
+            .contacts-sidebar { overflow-y: auto; }
+            .contacts-sidebar::-webkit-scrollbar { display: none; }
+        }
     </style>
 </head>
 <body>
+
+    <div id="iosPrompt" style="display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #111; border: 2px solid var(--yellow-jeopardy); color: #fff; padding: 10px 20px; border-radius: 8px; font-family: monospace; font-size: 11px; z-index: 9999; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+        <span style="color: var(--yellow-jeopardy); font-weight: bold;">PRO TIP:</span> Tap 'Share' and 'Add to Home Screen' for the ultimate Full Screen experience!
+    </div>
 
     <div id="landscape-lock">
         <h2 style="color: var(--yellow-jeopardy); margin-bottom: 10px; font-family: monospace;">PLEASE ROTATE YOUR DEVICE</h2>
@@ -478,7 +487,7 @@
             <h2 id="introTitle" style="color: var(--yellow-jeopardy); margin: 0; letter-spacing:2px; font-family: monospace;"></h2>
             <p id="introSubtitle" style="color: #fff; font-size: 16px; margin-top: -10px; font-family: monospace;"></p>
             <img id="introImage" src="" style="width: 100%; max-height: 200px; object-fit: contain; margin: 10px 0; border-radius: 8px; display: none;"> 
-                <button class="modal-btn" onclick="enterFullScreen(); document.getElementById('introModal').style.display='none'; triggerLevelStart();">START LEVEL</button>
+            <button class="modal-btn" onclick="enterFullScreen(); document.getElementById('introModal').style.display='none'; triggerLevelStart();">START LEVEL</button>
         </div>
     </div>
 
@@ -531,10 +540,6 @@
             <div id="victorySplashImages" class="splash-image-container"></div>
             <button class="modal-btn" onclick="document.getElementById('victorySplashOverlay').style.display='none'; advanceLevel()">PROCEED TO NEXT LEVEL</button>
         </div>
-    </div>
-
-        <div id="iosPrompt" style="display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #111; border: 2px solid var(--yellow-jeopardy); color: #fff; padding: 10px 20px; border-radius: 8px; font-family: monospace; font-size: 11px; z-index: 9999; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8);">
-        <span style="color: var(--yellow-jeopardy); font-weight: bold;">PRO TIP:</span> Tap 'Share' and 'Add to Home Screen' for the ultimate Full Screen experience!
     </div>
 
     <script>
@@ -655,23 +660,18 @@
 
         // Forces fullscreen on Android/Desktop, handles iPhones gracefully
         function enterFullScreen() {
-            // Check if it's an iOS device
             let isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            // Check if they are already playing from the Home Screen
             let isStandalone = window.navigator.standalone === true; 
 
             if (isIOS) {
-                // If they are on an iPhone in the Safari browser, show the tip!
                 if (!isStandalone) {
                     let prompt = document.getElementById('iosPrompt');
                     prompt.style.display = 'block';
-                    // Hide the prompt after 6 seconds
                     setTimeout(() => { prompt.style.display = 'none'; }, 6000);
                 }
-                return; // Abort the actual fullscreen request so iOS doesn't throw an error
+                return; 
             }
 
-            // For Android and Desktop, proceed with standard fullscreen
             let docEl = document.documentElement;
             let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
             
@@ -1085,11 +1085,6 @@
                     return `<span style="color: ${cData.color}; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; font-weight: bold;">${cData.name}</span>`;
                 }).join(', ');
                 chainDisplay.innerHTML = `How about... ${namesHTML}`;
-                
-                ['R','B','G','Y','W'].forEach(key => {
-                    let btn = document.getElementById(`key-${key}`);
-                    if(btn) btn.className = `key-btn key-${key.toLowerCase()}`;
-                });
             } else {
                 chainDisplay.innerText = "iMessage";
                 sendArrow.style.display = 'none';
@@ -1182,14 +1177,6 @@
             isScrollingList = true;
             evaluateSequences();
             updateUI();
-
-            let keyEl = document.getElementById(`key-${sym}`);
-            if(keyEl) {
-                keyEl.classList.add(`active-${sym.toLowerCase()}`);
-                setTimeout(() => {
-                    if (keyEl) keyEl.classList.remove(`active-${sym.toLowerCase()}`);
-                }, 250);
-            }
             
             setTimeout(() => {
                 isScrollingList = false;
