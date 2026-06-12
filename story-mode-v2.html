@@ -519,6 +519,10 @@
         </div>
     </div>
 
+        <div id="iosPrompt" style="display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #111; border: 2px solid var(--yellow-jeopardy); color: #fff; padding: 10px 20px; border-radius: 8px; font-family: monospace; font-size: 11px; z-index: 9999; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+        <span style="color: var(--yellow-jeopardy); font-weight: bold;">PRO TIP:</span> Tap 'Share' and 'Add to Home Screen' for the ultimate Full Screen experience!
+    </div>
+
     <script>
         // FULL LORE EXPANSION
         const COLORS = {
@@ -634,15 +638,33 @@
             buildBoardHTML();
             loadLevel(0); 
         };
-                // Forces the browser into fullscreen mode across all device types
+        
+        // Forces fullscreen on Android/Desktop, handles iPhones gracefully
         function enterFullScreen() {
+            // Check if it's an iOS device
+            let isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            // Check if they are already playing from the Home Screen
+            let isStandalone = window.navigator.standalone === true; 
+
+            if (isIOS) {
+                // If they are on an iPhone in the Safari browser, show the tip!
+                if (!isStandalone) {
+                    let prompt = document.getElementById('iosPrompt');
+                    prompt.style.display = 'block';
+                    // Hide the prompt after 6 seconds
+                    setTimeout(() => { prompt.style.display = 'none'; }, 6000);
+                }
+                return; // Abort the actual fullscreen request so iOS doesn't throw an error
+            }
+
+            // For Android and Desktop, proceed with standard fullscreen
             let docEl = document.documentElement;
             let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
             
             if (requestFullScreen) {
                 try {
                     requestFullScreen.call(docEl).catch(err => {
-                        console.log("Fullscreen blocked by browser:", err.message);
+                        console.log("Fullscreen blocked:", err.message);
                     });
                 } catch (e) {
                     requestFullScreen.call(docEl);
