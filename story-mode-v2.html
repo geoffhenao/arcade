@@ -151,7 +151,6 @@
         .info-label { color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
         .info-value { color: #fff; font-size: 14px; font-weight: bold;}
 
-
         /* === 2. CENTER COLUMN: THE GRID === */
         .center-column { grid-column: 2; grid-row: 2; display: flex; align-items: flex-start; justify-content: center; height: 100%; }
 
@@ -178,11 +177,10 @@
         }
 
         /* HIGH SPOT ANIMATION & STYLING */
-                /* HIGH SPOT ANIMATION & STYLING */
         .high-spot-text {
             position: absolute; 
-            top: 50%; left: 50%; transform: translate(-50%, -50%); /* Locks to center instantly */
-            width: 100%; /* Prevents accidental wrapping */
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100%;
             font-size: 12px; font-weight: bold; letter-spacing: 1px;
             font-family: monospace; z-index: 5; pointer-events: none;
             animation: hsCycle 1.5s infinite alternate; text-align: center;
@@ -210,7 +208,7 @@
             border: 2px solid;
         }
         .grid-space.valid-move:hover { transform: scale(1.03); }
-        .grid-space.player-here { border: 2px  #fff !important; box-shadow: inset 0 0 14px var(--active-glow-color, #fff), inset 0 0 10px var(--active-glow-color, #fff) !important; z-index: 2; }
+        .grid-space.player-here { border: 2px dashed #fff !important; box-shadow: inset 0 0 14px var(--active-glow-color, #fff), inset 0 0 10px var(--active-glow-color, #fff) !important; z-index: 2; }
         
         .grid-space.placed-dim { border-color: #444 !important; }
         .grid-space.placed-dim .hq-grid-art { opacity: 0.4; filter: grayscale(0.5); }
@@ -244,16 +242,15 @@
         
         .grid-space.start-anim { animation: rgbCycle 3s infinite alternate; border: 2px solid;}
         
-                .grid-space.start-anim::after, .grid-space.start-static::after, .grid-space.start-locked::after {
+        .grid-space.start-anim::after, .grid-space.start-static::after, .grid-space.start-locked::after {
             content: "START"; position: absolute; 
-            top: 50%; left: 50%; transform: translate(-50%, -50%); /* Locks to center instantly */
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
             font-size: 14px; font-weight: bold; letter-spacing: 1px;
             color: #ffffff; text-shadow: 0 0 8px #000; z-index: 5; pointer-events: none; font-family: monospace;
         }
         
         .grid-space.start-locked::after {
-            content: "START"; position: absolute; font-size: 14px; font-weight: bold; letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.4); text-shadow: 0 0 8px #000; z-index: 5; pointer-events: none; font-family: monospace;
+            color: rgba(255, 255, 255, 0.4); 
         }
 
         /* === 3. RIGHT COLUMN: iMESSAGE UI === */
@@ -334,11 +331,55 @@
         .key-btn.active-y { background: #f1c40f; color: #fff; border-color: #fff; box-shadow: 0 0 10px #f1c40f; opacity: 1; transform: scale(1.1);}
         .key-btn.active-w { background: #ffffff; color: #000; border-color: #fff; box-shadow: 0 0 10px #ffffff; opacity: 1; transform: scale(1.1);}
 
-        /* === MODALS === */
+        /* === MODALS & SPLASH SCREENS === */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); justify-content: center; align-items: center; z-index: 50; padding: 20px; font-family: monospace;}
         .modal-content { background: #111; border: 4px solid var(--yellow-jeopardy); padding: 30px; border-radius: 8px; text-align: center; width: 100%; max-width: 450px; box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); display: flex; flex-direction: column; gap: 15px; }
         .modal-btn { background-color: transparent; border: 2px solid #fff; color: #fff; padding: 12px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; transition: all 0.2s; font-size: 14px; text-transform: uppercase; margin-top: 15px;}
         .modal-btn:hover { background-color: var(--yellow-jeopardy); color: #fff; border-color: var(--yellow-jeopardy); }
+
+        /* Splash Screen Shared CSS */
+        .splash-content {
+            background: #111; border: 4px solid var(--yellow-jeopardy); padding: 30px; border-radius: 8px; 
+            text-align: center; box-shadow: 0 0 30px rgba(51, 102, 153, 0.6); 
+            display: flex; flex-direction: column; gap: 15px; width: 100%;
+        }
+
+        /* ========================================== */
+        /* CHANGE SPLASH BOX SIZE HERE                */
+        /* Adjust max-width to change how wide the    */
+        /* combo and victory popup screens can get.   */
+        /* ========================================== */
+        .splash-box-combo {
+            max-width: 600px; 
+        }
+        .splash-box-victory {
+            max-width: 850px; 
+        }
+        
+        .splash-image-container {
+            display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; flex-wrap: wrap;
+        }
+        .splash-img-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .splash-img {
+            width: 120px; height: 120px; object-fit: cover; object-position: top center;
+            border: 3px solid; border-radius: 8px; background: #000;
+        }
+        .splash-name {
+            font-size: 11px; font-weight: bold; font-family: monospace; text-transform: uppercase;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        /* Slide In/Out Keyframes for the Dynamic Modals */
+        @keyframes slideInRight {
+            from { transform: translateX(100vw); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutLeft {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100vw); opacity: 0; }
+        }
 
         /* === MOBILE STACKING === */
         @media (max-width: 1024px) {
@@ -415,13 +456,6 @@
                 </div>
 
                 <div class="keyboard-area" id="keyboardPane">
-                    <div class="keyboard-row">
-                        <div class="key-btn key-r" id="key-R">R</div>
-                        <div class="key-btn key-b" id="key-B">B</div>
-                        <div class="key-btn key-g" id="key-G">G</div>
-                        <div class="key-btn key-y" id="key-Y">Y</div>
-                        <div class="key-btn key-w" id="key-W">W</div>
-                    </div>
                     <div class="keyboard-row" style="margin-top: 10px;">
                         <button class="modal-btn" style="padding: 8px 12px; font-size: 10px; flex: 1;" onclick="openRules()">RULES</button>
                         <button class="modal-btn" style="padding: 8px 12px; font-size: 10px; flex: 1;" onclick="resetLevel()">RESTART</button>
@@ -477,6 +511,22 @@
         <div class="modal-content" id="modalContent"></div>
     </div>
 
+    <div id="comboSplashOverlay" class="modal-overlay">
+        <div id="comboSplashContent" class="splash-content splash-box-combo">
+            <h2 style="color: var(--yellow-jeopardy); margin-top: 0; font-family: monospace;">COMBO SUCCESS!</h2>
+            <div id="comboSplashImages" class="splash-image-container"></div>
+        </div>
+    </div>
+
+    <div id="victorySplashOverlay" class="modal-overlay">
+        <div id="victorySplashContent" class="splash-content splash-box-victory">
+            <h2 style="color: #00ff00; margin-top: 0; font-family: monospace;">LEVEL CLEARED!</h2>
+            <p id="victorySplashText" style="font-family: monospace; font-size: 14px; margin-top: -10px;"></p>
+            <div id="victorySplashImages" class="splash-image-container"></div>
+            <button class="modal-btn" onclick="document.getElementById('victorySplashOverlay').style.display='none'; advanceLevel()">PROCEED TO NEXT LEVEL</button>
+        </div>
+    </div>
+
     <script>
         // FULL LORE EXPANSION
         const COLORS = {
@@ -521,7 +571,6 @@
                 failText: "This is a disaster! The crowd is literally leaving! We're ruined!",
                 winText: "Not bad for your first night! The crowd is actually on their feet.",
                 sequences: [
-                    // Example of custom objective text utilizing the {reqString} placeholder
                     { target: ["R", "G", "Y"], completed: false, chatPhase: 0, objectiveText: "We need a strong opener. Find me {reqString}!" }, 
                     { target: ["B", "R", "G"], highSpotTarget: "B", completed: false, chatPhase: 0, objectiveText: "Keep the momentum going. I want to see {reqString} out there next!" }, 
                     { target: ["G", "Y", "R"], completed: false, chatPhase: 0, objectiveText: "Time for a classic showdown. Send out {reqString}." }, 
@@ -587,6 +636,7 @@
         let levelUsedUIDs = []; 
         let isScrollingList = false;
         let levelBonusAwarded = false;
+        let levelWinningRoster = []; // Captures all successful characters sequentially
 
         window.onload = function() {
             buildBoardHTML();
@@ -681,7 +731,7 @@
         }
 
         function resetLevelData() {
-            levelPhase = "intro"; rerollsAvailable = 1; score = 0; levelUsedUIDs = []; levelBonusAwarded = false;
+            levelPhase = "intro"; rerollsAvailable = 1; score = 0; levelUsedUIDs = []; levelBonusAwarded = false; levelWinningRoster = [];
             currentChain = []; selectedCardIndex = null; playerPos = null; 
             currentHype = 0; updateHype(); promoterReaction = "";
             
@@ -1080,14 +1130,6 @@
             playerPos = { r: r, c: c };
             boardState[r][c].occupied = true; boardState[r][c].type = chosenCard.type; boardState[r][c].variantData = chosenCard;
 
-            let keyEl = document.getElementById(`key-${sym}`);
-            if(keyEl) {
-                keyEl.classList.add(`active-${sym.toLowerCase()}`);
-                setTimeout(() => {
-                    if (keyEl) keyEl.classList.remove(`active-${sym.toLowerCase()}`);
-                }, 250);
-            }
-
             appendGlyphToSpace(el, chosenCard);
             currentChain.push({ r: r, c: c });
 
@@ -1097,6 +1139,14 @@
             isScrollingList = true;
             evaluateSequences();
             updateUI();
+
+            let keyEl = document.getElementById(`key-${sym}`);
+            if(keyEl) {
+                keyEl.classList.add(`active-${sym.toLowerCase()}`);
+                setTimeout(() => {
+                    if (keyEl) keyEl.classList.remove(`active-${sym.toLowerCase()}`);
+                }, 250);
+            }
             
             setTimeout(() => {
                 isScrollingList = false;
@@ -1221,6 +1271,37 @@
                     let affirmations = ["I got you!", "No problem!", "Hell yeah, what's next?", "All good!"];
                     obj.affirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
 
+                    // Track ALL winning characters sequentially for end-of-level victory splash
+                    levelWinningRoster.push(...obj.completedChainData);
+
+                    // ===============================================
+                    // FIRE THE DYNAMIC MID-LEVEL COMBO SPLASH
+                    // ===============================================
+                    let splashHTML = '';
+                    obj.completedChainData.forEach(card => {
+                        splashHTML += `
+                            <div class="splash-img-wrapper">
+                                <img src="${card.img}" class="splash-img" style="border-color: ${card.color}; box-shadow: 0 0 10px ${card.glowFade}">
+                                <div class="splash-name" style="color: ${card.color};">${card.name}</div>
+                            </div>`;
+                    });
+                    document.getElementById('comboSplashImages').innerHTML = splashHTML;
+                    let comboSplash = document.getElementById('comboSplashOverlay');
+                    let comboContent = document.getElementById('comboSplashContent');
+                    
+                    // Slide In
+                    comboContent.style.animation = 'slideInRight 0.1s ease-out forwards';
+                    comboSplash.style.display = 'flex';
+                    
+                    // Auto Hide after 2.5 seconds (slides out to the left)
+                    setTimeout(() => {
+                        comboContent.style.animation = 'slideOutLeft 0.1s ease-in forwards';
+                        setTimeout(() => {
+                            comboSplash.style.display = 'none';
+                        }, 100); // Matches animation duration, e.g. 0.1s = 100ms
+                    }, 800); // This affects how long splash stays on screen.
+                    // ===============================================
+
                     currentChain = []; 
                     updateHype();
 
@@ -1338,16 +1419,28 @@
 
         function triggerLevelClearedScreen() {
             let winString = GAME_LEVELS[currentLevelIndex].winText || "The crowd is eating out of the palm of your hand!";
-            document.getElementById('modalContent').innerHTML = `
-                <h2 style="color: #00ff00; margin-top: 0; font-family: monospace;">LEVEL CLEARED!</h2>
-                <p style="font-family: monospace;">${winString}</p>
-                <button class="modal-btn" onclick="advanceLevel()">PROCEED TO NEXT LEVEL</button>
-            `;
-            document.getElementById('statusModal').style.display = 'flex';
+            document.getElementById('victorySplashText').innerText = winString;
+            
+            // Generate the dynamic HTML for EVERY winning character this level
+            let victoryHTML = '';
+            levelWinningRoster.forEach(card => {
+                victoryHTML += `
+                    <div class="splash-img-wrapper">
+                        <img src="${card.img}" class="splash-img" style="border-color: ${card.color}; box-shadow: 0 0 10px ${card.glowFade}; width: 80px; height: 80px;">
+                        <div class="splash-name" style="color: ${card.color}; font-size: 9px;">${card.name}</div>
+                    </div>`;
+            });
+            document.getElementById('victorySplashImages').innerHTML = victoryHTML;
+            
+            // Fire the Victory Splash Screen
+            let victorySplash = document.getElementById('victorySplashOverlay');
+            let victoryContent = document.getElementById('victorySplashContent');
+            victoryContent.style.animation = 'slideInRight 0.5s ease-out forwards';
+            victorySplash.style.display = 'flex';
         }
 
         function advanceLevel() { 
-            document.getElementById('statusModal').style.display = 'none';
+            document.getElementById('victorySplashOverlay').style.display = 'none';
             currentLevelIndex++; 
             loadLevel(currentLevelIndex); 
         }
